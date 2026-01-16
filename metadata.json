@@ -1,0 +1,7 @@
+{
+  "name": "PIN - Trantor Base",
+  "description": "Professional, intuitive task management inspired by SuiteCRM with Gemini AI voice capabilities.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
