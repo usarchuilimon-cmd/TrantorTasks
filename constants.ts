@@ -218,8 +218,10 @@ export const TRANSLATIONS = {
         // Login Screen
         loginSubtitle: "Please enter your details to access your workspace.",
         emailLabel: "Email address",
+        phoneLabel: "Phone number",
         passwordLabel: "Password",
         signInButton: "Sign in",
+        createAccount: "Create Account",
         heroTitle: "Manage projects effortlessly",
         heroSubtitle: "Track progress, collaborate with your team, and ship faster with TRANTOR.",
         signUp: "Sign Up",
@@ -397,8 +399,10 @@ export const TRANSLATIONS = {
         // Login Screen
         loginSubtitle: "Ingresa tus datos para acceder a tu espacio de trabajo.",
         emailLabel: "Correo electrónico",
+        phoneLabel: "Número de teléfono",
         passwordLabel: "Contraseña",
         signInButton: "Iniciar Sesión",
+        createAccount: "Crear Cuenta",
         heroTitle: "Gestiona proyectos sin esfuerzo",
         heroSubtitle: "Monitorea el progreso, colabora con tu equipo y entrega más rápido con TRANTOR.",
         signUp: "Registrarse",
