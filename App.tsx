@@ -202,7 +202,9 @@ const App: React.FC = () => {
                 actualTime: item.actual_time,
                 isUrgent: item.is_urgent,
                 isImportant: item.is_important,
-                comments: item.comments || []
+                isImportant: item.is_important,
+                comments: item.comments || [],
+                completedAt: item.completed_at
             }));
             setTasks(mappedTasks);
         }
@@ -261,7 +263,9 @@ const App: React.FC = () => {
                 actualTime: data.actual_time,
                 isUrgent: data.is_urgent,
                 isImportant: data.is_important,
-                comments: data.comments || []
+                isImportant: data.is_important,
+                comments: data.comments || [],
+                completedAt: data.completed_at
             };
 
             setTasks(prev => [newTask, ...prev]);
@@ -285,7 +289,16 @@ const App: React.FC = () => {
         if (updates.title !== undefined) dbUpdates.title = updates.title;
         if (updates.description !== undefined) dbUpdates.description = updates.description;
         if (updates.priority !== undefined) dbUpdates.priority = updates.priority;
-        if (updates.status !== undefined) dbUpdates.status = updates.status;
+        if (updates.status !== undefined) {
+            dbUpdates.status = updates.status;
+            if (updates.status === Status.COMPLETED) {
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                dbUpdates.completed_at = `${yyyy}-${mm}-${dd}`;
+            }
+        }
         if (updates.dueDate !== undefined) dbUpdates.due_date = updates.dueDate;
         if (updates.assignee !== undefined) dbUpdates.assignee = updates.assignee;
         if (updates.relatedTo !== undefined) dbUpdates.related_to = updates.relatedTo;
