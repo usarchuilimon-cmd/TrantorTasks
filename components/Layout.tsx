@@ -9,7 +9,7 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
-    const { user, logout, language, setLanguage, darkMode, toggleDarkMode, currency, setCurrency, currentRoute, setRoute, notifications, markAllRead, clearNotifications } = useContext(AppContext);
+    const { user, logout, language, setLanguage, darkMode, toggleDarkMode, currency, setCurrency, voiceEnabled, setVoiceEnabled, currentRoute, setRoute, notifications, markAllRead, clearNotifications } = useContext(AppContext);
     const t = TRANSLATIONS[language];
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isCollapsed, setIsCollapsed] = useState(false);
@@ -80,12 +80,12 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
 
     // Helper for Mobile Bottom Nav Item
     const MobileNavItem = ({ icon, label, routeName, active }: { icon: string, label: string, routeName: string, active: boolean }) => (
-        <button 
+        <button
             onClick={() => handleNavigate(routeName)}
             className={`flex flex-col items-center justify-center w-full h-full space-y-1 transition-all duration-200 active:scale-95 ${active ? 'text-primary-600 dark:text-primary-400' : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300'}`}
         >
             <span className={`material-symbols-outlined text-2xl ${active ? 'font-variation-settings-fill' : ''}`}>
-                {active ? icon : icon} 
+                {active ? icon : icon}
             </span>
             <span className="text-[10px] font-medium truncate max-w-full leading-none">{label}</span>
         </button>
@@ -93,7 +93,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
 
     return (
         <div className="flex h-screen bg-background-light dark:bg-background-dark overflow-hidden">
-            
+
             {/* Desktop Sidebar - HIDDEN on Mobile */}
             <aside className={`
                 hidden md:flex
@@ -110,34 +110,34 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                         </div>
                         <span className="font-bold text-lg text-gray-900 dark:text-white tracking-tight">TRANTOR</span>
                     </div>
-                    
+
                     {/* Desktop Collapse Button */}
-                    <button 
+                    <button
                         onClick={() => setIsCollapsed(!isCollapsed)}
                         className={`text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors ${isCollapsed ? 'block' : ''}`}
                         title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                     >
-                         <span className="material-symbols-outlined text-xl">
+                        <span className="material-symbols-outlined text-xl">
                             {isCollapsed ? 'menu' : 'menu_open'}
-                         </span>
+                        </span>
                     </button>
                 </div>
 
                 {/* Main Nav */}
                 <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1 scrollbar-hide">
-                    <NavItem 
-                        icon="dashboard" 
-                        label={t.dashboard} 
-                        href="#dashboard" 
-                        active={currentRoute === '#dashboard'} 
+                    <NavItem
+                        icon="dashboard"
+                        label={t.dashboard}
+                        href="#dashboard"
+                        active={currentRoute === '#dashboard'}
                         onNavigate={handleNavigate}
                         collapsed={isCollapsed}
                     />
-                    <NavItem 
-                        icon="task_alt" 
-                        label={t.tasks} 
-                        href="#tasks" 
-                        active={currentRoute === '#tasks'} 
+                    <NavItem
+                        icon="task_alt"
+                        label={t.tasks}
+                        href="#tasks"
+                        active={currentRoute === '#tasks'}
                         onNavigate={handleNavigate}
                         collapsed={isCollapsed}
                     />
@@ -146,15 +146,15 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                 {/* User Menu Content (Collapsible) */}
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 ${isUserMenuOpen && !isCollapsed ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
                     <div className="p-3 space-y-1">
-                        <NavItem 
-                            icon="person" 
-                            label={t.profile} 
-                            href="#profile" 
-                            active={currentRoute === '#profile'} 
+                        <NavItem
+                            icon="person"
+                            label={t.profile}
+                            href="#profile"
+                            active={currentRoute === '#profile'}
                             onNavigate={handleNavigate}
                             collapsed={false}
                         />
-                        
+
                         <div className="my-2 border-t border-gray-200 dark:border-gray-700"></div>
 
                         {/* Controls */}
@@ -167,8 +167,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                             </div>
                             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <span>{t.language}</span>
-                                <select 
-                                    value={language} 
+                                <select
+                                    value={language}
                                     onChange={(e) => setLanguage(e.target.value as any)}
                                     className="bg-transparent border-none text-sm focus:ring-0 cursor-pointer text-gray-900 dark:text-white p-0"
                                 >
@@ -176,10 +176,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                                     <option value="es">ES</option>
                                 </select>
                             </div>
-                             <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
                                 <span>{t.currency}</span>
-                                <select 
-                                    value={currency} 
+                                <select
+                                    value={currency}
                                     onChange={(e) => setCurrency(e.target.value as any)}
                                     className="bg-transparent border-none text-sm focus:ring-0 cursor-pointer text-gray-900 dark:text-white p-0"
                                 >
@@ -187,15 +187,20 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                                     <option value="MXN">MXN</option>
                                 </select>
                             </div>
+                            <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                                <span>{t.voiceAssistant}</span>
+                                <button onClick={() => setVoiceEnabled(!voiceEnabled)} className={`w-10 h-6 rounded-full p-1 transition-colors ${voiceEnabled ? 'bg-primary-500' : 'bg-gray-300'}`}>
+                                    <div className={`w-4 h-4 rounded-full bg-white transform transition-transform ${voiceEnabled ? 'translate-x-4' : ''}`} />
+                                </button>
+                            </div>
 
                             {/* Log Option - Styled like Controls */}
-                            <div 
+                            <div
                                 onClick={() => handleNavigate('#settings')}
-                                className={`flex items-center justify-between text-sm cursor-pointer transition-colors group ${
-                                    currentRoute === '#settings' 
-                                    ? 'text-primary-600 dark:text-primary-400 font-medium' 
+                                className={`flex items-center justify-between text-sm cursor-pointer transition-colors group ${currentRoute === '#settings'
+                                    ? 'text-primary-600 dark:text-primary-400 font-medium'
                                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 <span>{t.settings}</span>
                                 <span className={`material-symbols-outlined text-[20px] ${currentRoute === '#settings' ? 'text-primary-600' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300'}`}>
@@ -213,10 +218,10 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
 
                 {/* User Card Trigger */}
                 <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-surface-light dark:bg-surface-dark">
-                     <button 
+                    <button
                         onClick={handleUserClick}
                         className={`flex items-center gap-3 w-full hover:bg-gray-100 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors group ${isCollapsed ? 'justify-center' : '-ml-2'}`}
-                     >
+                    >
                         <div className="relative flex-shrink-0">
                             <img src={user?.avatar} alt={user?.name} className="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-600" />
                             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
@@ -228,23 +233,23 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                         <span className={`material-symbols-outlined text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-all duration-300 ${isUserMenuOpen ? 'rotate-180' : ''} ${isCollapsed ? 'w-0 opacity-0 overflow-hidden hidden md:block' : 'w-auto opacity-100'}`}>
                             expand_less
                         </span>
-                     </button>
+                    </button>
                 </div>
             </aside>
 
             {/* Main Content */}
             <main className="flex-1 flex flex-col min-w-0 overflow-hidden relative transition-all duration-300">
                 <header className="h-16 flex items-center justify-between px-4 md:px-8 bg-surface-light dark:bg-surface-dark border-b border-gray-200 dark:border-gray-700 z-30 flex-shrink-0">
-                     <div className="flex items-center gap-3 min-w-0">
-                         {/* Mobile Logo only (No Menu Button) */}
-                         <div className="md:hidden flex-shrink-0">
+                    <div className="flex items-center gap-3 min-w-0">
+                        {/* Mobile Logo only (No Menu Button) */}
+                        <div className="md:hidden flex-shrink-0">
                             <Logo className="w-8 h-8" />
-                         </div>
-                         <h1 className="text-xl font-bold text-gray-900 dark:text-white truncate">{title}</h1>
-                     </div>
-                     <div className="flex items-center gap-4 flex-shrink-0">
+                        </div>
+                        <h1 className="text-xl font-bold text-gray-900 dark:text-white truncate">{title}</h1>
+                    </div>
+                    <div className="flex items-center gap-4 flex-shrink-0">
                         <div className="relative" ref={notificationRef}>
-                            <button 
+                            <button
                                 onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
                                 className={`relative p-2 rounded-full transition-colors ${isNotificationsOpen ? 'bg-gray-100 dark:bg-gray-800 text-primary-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'}`}
                             >
@@ -276,10 +281,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                                                 {notifications.map((n) => (
                                                     <li key={n.id} className={`p-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${!n.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}>
                                                         <div className="flex gap-3">
-                                                            <div className={`mt-1 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                                                                n.type === 'alert' ? 'bg-red-100 text-red-600' : 
+                                                            <div className={`mt-1 flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${n.type === 'alert' ? 'bg-red-100 text-red-600' :
                                                                 n.type === 'success' ? 'bg-green-100 text-green-600' : 'bg-blue-100 text-blue-600'
-                                                            }`}>
+                                                                }`}>
                                                                 <span className="material-symbols-outlined text-sm">
                                                                     {n.type === 'alert' ? 'warning' : n.type === 'success' ? 'check_circle' : 'info'}
                                                                 </span>
@@ -292,7 +296,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                                                                     {n.message}
                                                                 </p>
                                                                 <p className="text-[10px] text-gray-400 mt-2">
-                                                                    {n.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                                                                    {n.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                                 </p>
                                                             </div>
                                                             {!n.isRead && (
@@ -316,7 +320,7 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                         </div>
 
                         {/* Fullscreen Button */}
-                        <button 
+                        <button
                             onClick={toggleFullscreen}
                             className="hidden md:block p-2 rounded-full text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                             title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
@@ -325,9 +329,9 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
                                 {isFullscreen ? 'fullscreen_exit' : 'fullscreen'}
                             </span>
                         </button>
-                     </div>
+                    </div>
                 </header>
-                
+
                 {/* Content Area - Adjusted padding for bottom nav */}
                 <div className="flex-1 overflow-auto p-4 md:p-8 pb-24 md:pb-8">
                     {children}
@@ -356,22 +360,21 @@ export const Layout: React.FC<LayoutProps> = ({ children, title }) => {
     );
 };
 
-const NavItem: React.FC<{ 
-    icon: string; 
-    label: string; 
-    href: string; 
+const NavItem: React.FC<{
+    icon: string;
+    label: string;
+    href: string;
     active?: boolean;
     onNavigate: (route: string) => void;
     collapsed?: boolean;
 }> = ({ icon, label, href, active, onNavigate, collapsed }) => (
-    <a 
-        href={href} 
+    <a
+        href={href}
         onClick={(e) => { e.preventDefault(); onNavigate(href); }}
-        className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
-            active 
-            ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400' 
+        className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${active
+            ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400'
             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
-        } ${collapsed ? 'justify-center' : ''}`}
+            } ${collapsed ? 'justify-center' : ''}`}
         title={collapsed ? label : undefined}
     >
         <span className="material-symbols-outlined text-xl flex-shrink-0">{icon}</span>

@@ -92,6 +92,8 @@ export interface AppContextType {
     setLanguage: (lang: Language) => void;
     currency: Currency;
     setCurrency: (curr: Currency) => void;
+    voiceEnabled: boolean;
+    setVoiceEnabled: (enabled: boolean) => void;
     tasks: Task[];
     addTask: (task: Omit<Task, 'id'>) => void;
     updateTask: (id: string, updates: Partial<Task>) => void;

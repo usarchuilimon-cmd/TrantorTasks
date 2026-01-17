@@ -17,6 +17,7 @@ const App: React.FC = () => {
     const [darkMode, setDarkMode] = useState(false);
     const [language, setLanguage] = useState<Language>(Language.ES);
     const [currency, setCurrency] = useState<Currency>(Currency.MXN);
+    const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [loading, setLoading] = useState(true);
     const [notifications, setNotifications] = useState<AppNotification[]>([]);
@@ -336,6 +337,7 @@ const App: React.FC = () => {
         darkMode, toggleDarkMode,
         language, setLanguage,
         currency, setCurrency,
+        voiceEnabled, setVoiceEnabled,
         tasks, addTask, updateTask, deleteTask,
         currentRoute: route, setRoute,
         notifications, markAllRead, clearNotifications,
@@ -443,7 +445,7 @@ const App: React.FC = () => {
             <Layout title={title}>
                 {content}
             </Layout>
-            <VoiceAssistant />
+            {voiceEnabled && <VoiceAssistant />}
         </AppContext.Provider>
     );
 };

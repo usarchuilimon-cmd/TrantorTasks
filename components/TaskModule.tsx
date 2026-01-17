@@ -10,17 +10,17 @@ import { KpiModule } from './KpiModule';
 const getDueDateStatus = (task: Task) => {
     const today = new Date();
     const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-    
+
     if (task.status === Status.COMPLETED) return { className: 'text-gray-500 dark:text-gray-400', icon: 'check_circle' };
     if (!task.dueDate) return { className: 'text-gray-500 dark:text-gray-400', icon: 'calendar_today' };
-    
+
     if (task.dueDate < todayStr) {
         return { className: 'text-red-500 dark:text-red-400 font-medium', icon: 'error' }; // Overdue
     }
     if (task.dueDate === todayStr) {
         return { className: 'text-orange-600 dark:text-orange-400 font-medium', icon: 'alarm' }; // Due Today
     }
-    
+
     return { className: 'text-gray-500 dark:text-gray-400', icon: 'schedule' };
 };
 
@@ -68,7 +68,7 @@ const TaskTimer: React.FC<TaskTimerProps> = ({ task, updateTask, compact, varian
             const now = Date.now();
             const elapsedHours = (now - (task.timerStartTime || now)) / (1000 * 60 * 60);
             const newActual = (task.actualTime || 0) + elapsedHours;
-            
+
             updateTask(task.id, {
                 isTimerRunning: false,
                 timerStartTime: undefined,
@@ -88,12 +88,12 @@ const TaskTimer: React.FC<TaskTimerProps> = ({ task, updateTask, compact, varian
     const hasEstimate = estimated > 0;
     const progressPercent = hasEstimate ? Math.min(100, (displayTime / estimated) * 100) : 0;
     const isOverBudget = hasEstimate && displayTime > estimated;
-    
+
     // Bar Variant (for details/modal)
     if (variant === 'bar') {
         let statusColor = "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400";
         let barColor = "bg-primary-500";
-        
+
         if (isOverBudget) {
             statusColor = "bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400";
             barColor = "bg-red-500";
@@ -109,16 +109,15 @@ const TaskTimer: React.FC<TaskTimerProps> = ({ task, updateTask, compact, varian
 
         return (
             <div className={`w-full rounded-lg p-3 border border-transparent ${task.isTimerRunning ? 'border-primary-200 bg-primary-50/50 dark:border-primary-800 dark:bg-primary-900/10' : 'bg-gray-50 dark:bg-gray-800/50'} ${className || ''}`} onClick={(e) => e.stopPropagation()}>
-                 <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center gap-3">
                         <button
                             type="button"
                             onClick={handleToggleTimer}
-                            className={`w-12 h-12 md:w-8 md:h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${
-                                task.isTimerRunning 
-                                ? 'bg-red-500 text-white hover:bg-red-600 animate-pulse' 
+                            className={`w-12 h-12 md:w-8 md:h-8 rounded-full flex items-center justify-center transition-all shadow-sm ${task.isTimerRunning
+                                ? 'bg-red-500 text-white hover:bg-red-600 animate-pulse'
                                 : 'bg-green-500 text-white hover:bg-green-600'
-                            }`}
+                                }`}
                             title={task.isTimerRunning ? t.stopTimer : t.startTimer}
                         >
                             <span className="material-symbols-outlined text-[24px] md:text-[20px]">
@@ -143,26 +142,26 @@ const TaskTimer: React.FC<TaskTimerProps> = ({ task, updateTask, compact, varian
                             {percentageDisplay}%
                         </span>
                     )}
-                 </div>
-                 {/* Progress Bar */}
-                 {hasEstimate && (
-                     <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                         <div 
+                </div>
+                {/* Progress Bar */}
+                {hasEstimate && (
+                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                        <div
                             className={`h-full transition-all duration-1000 ease-linear ${barColor} ${task.isTimerRunning ? 'animate-[pulse_2s_infinite]' : ''}`}
                             style={{ width: `${progressPercent}%` }}
-                         />
-                     </div>
-                 )}
+                        />
+                    </div>
+                )}
             </div>
         );
     }
 
     // Default Pill Variant (Enhanced for List/Table - Mobile Optimized)
     return (
-        <div 
+        <div
             className={`flex items-center gap-2 pl-1 pr-3 py-1 rounded-full border transition-all duration-300 group
-                ${task.isTimerRunning 
-                    ? 'bg-red-50 border-red-200 dark:bg-red-900/10 dark:border-red-900 shadow-[0_0_10px_rgba(239,68,68,0.2)] ring-1 ring-red-100 dark:ring-red-900/30' 
+                ${task.isTimerRunning
+                    ? 'bg-red-50 border-red-200 dark:bg-red-900/10 dark:border-red-900 shadow-[0_0_10px_rgba(239,68,68,0.2)] ring-1 ring-red-100 dark:ring-red-900/30'
                     : 'bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-700 shadow-sm'} 
                 ${className || ''}`}
             onClick={(e) => e.stopPropagation()}
@@ -170,18 +169,17 @@ const TaskTimer: React.FC<TaskTimerProps> = ({ task, updateTask, compact, varian
             <button
                 type="button"
                 onClick={handleToggleTimer}
-                className={`flex-shrink-0 w-10 h-10 md:w-7 md:h-7 rounded-full flex items-center justify-center transition-all transform active:scale-95 ${
-                    task.isTimerRunning 
-                    ? 'bg-red-500 text-white hover:bg-red-600 animate-pulse shadow-md' 
+                className={`flex-shrink-0 w-10 h-10 md:w-7 md:h-7 rounded-full flex items-center justify-center transition-all transform active:scale-95 ${task.isTimerRunning
+                    ? 'bg-red-500 text-white hover:bg-red-600 animate-pulse shadow-md'
                     : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-500 hover:text-white dark:bg-indigo-900/30 dark:text-indigo-300 dark:hover:bg-indigo-600 dark:hover:text-white border border-indigo-100 dark:border-indigo-800 hover:border-transparent'
-                }`}
+                    }`}
                 title={task.isTimerRunning ? t.stopTimer : t.startTimer}
             >
                 <span className="material-symbols-outlined text-[24px] md:text-[18px] fill-current">
                     {task.isTimerRunning ? 'stop' : 'play_arrow'}
                 </span>
             </button>
-            
+
             <div className="flex flex-col justify-center min-w-[60px]">
                 <div className="flex items-center gap-1">
                     <div className={`px-1.5 py-0.5 rounded transition-colors ${task.isTimerRunning ? 'bg-red-100 dark:bg-red-500/20 animate-pulse' : ''}`}>
@@ -197,8 +195,8 @@ const TaskTimer: React.FC<TaskTimerProps> = ({ task, updateTask, compact, varian
                 </div>
                 {hasEstimate && !compact && (
                     <div className="w-full h-1 bg-gray-100 dark:bg-gray-700 rounded-full mt-0.5 overflow-hidden">
-                        <div 
-                            className={`h-full rounded-full transition-all duration-500 ${isOverBudget ? 'bg-red-500' : 'bg-indigo-500'}`} 
+                        <div
+                            className={`h-full rounded-full transition-all duration-500 ${isOverBudget ? 'bg-red-500' : 'bg-indigo-500'}`}
                             style={{ width: `${progressPercent}%` }}
                         ></div>
                     </div>
@@ -223,22 +221,21 @@ interface ViewProps {
     loadingTaskId: string | null;
 }
 
-const TTSButton: React.FC<{ 
-    task: Task; 
-    isPlaying: boolean; 
-    isLoading: boolean; 
+const TTSButton: React.FC<{
+    task: Task;
+    isPlaying: boolean;
+    isLoading: boolean;
     onClick: (e: React.MouseEvent) => void;
 }> = ({ task, isPlaying, isLoading, onClick }) => (
-    <button 
+    <button
         type="button"
         onClick={onClick}
-        className={`p-3 md:p-1.5 rounded-full transition-all ${
-            isPlaying 
-            ? 'bg-primary-100 text-primary-600 animate-pulse' 
-            : isLoading 
-                ? 'bg-gray-100 text-gray-400 cursor-wait' 
+        className={`p-3 md:p-1.5 rounded-full transition-all ${isPlaying
+            ? 'bg-primary-100 text-primary-600 animate-pulse'
+            : isLoading
+                ? 'bg-gray-100 text-gray-400 cursor-wait'
                 : 'text-gray-400 hover:text-primary-600 hover:bg-gray-100'
-        }`}
+            }`}
         title="Read task aloud"
     >
         <span className="material-symbols-outlined text-[24px] md:text-[18px]">
@@ -253,64 +250,63 @@ const ListView: React.FC<ViewProps> = ({ tasks, t, updateTask, onDeleteClick, on
             const dueStatus = getDueDateStatus(task);
             return (
                 <div key={task.id} className="group bg-surface-light dark:bg-surface-dark p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all flex flex-col sm:flex-row sm:items-center gap-4 animate-fade-in" onClick={() => onEditClick(task)}>
-                     <div className="flex items-center gap-4 w-full sm:flex-1 min-w-0">
-                         {/* Status Checkbox */}
-                         <button
+                    <div className="flex items-center gap-4 w-full sm:flex-1 min-w-0">
+                        {/* Status Checkbox */}
+                        <button
                             type="button"
                             onClick={(e) => { e.stopPropagation(); updateTask(task.id, { status: task.status === Status.COMPLETED ? Status.NOT_STARTED : Status.COMPLETED, completedAt: task.status !== Status.COMPLETED ? new Date().toISOString().split('T')[0] : undefined }); }}
                             className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors ${task.status === Status.COMPLETED ? 'bg-green-500 border-green-500' : 'border-gray-300 dark:border-gray-600 hover:border-primary-500'}`}
-                         >
+                        >
                             {task.status === Status.COMPLETED && <span className="material-symbols-outlined text-white text-sm font-bold">check</span>}
-                         </button>
+                        </button>
 
-                         <div className="flex-1 min-w-0">
-                             <div className="flex items-center gap-2">
-                                 <h4 className={`text-base font-semibold truncate ${task.status === Status.COMPLETED ? 'text-gray-500 line-through' : 'text-gray-900 dark:text-white'}`}>{task.title}</h4>
-                                 <span className={`px-2 py-0.5 text-[10px] uppercase font-bold rounded ${
-                                     task.priority === Priority.HIGH ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-                                     task.priority === Priority.MEDIUM ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
-                                     'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
-                                 }`}>{t.priorityVal[task.priority]}</span>
-                             </div>
-                             <div className="flex items-center gap-4 mt-1 text-xs text-gray-500 dark:text-gray-400">
-                                 <span className={`flex items-center gap-1 ${dueStatus.className}`}>
-                                     <span className="material-symbols-outlined text-sm">{dueStatus.icon}</span>
-                                     {task.dueDate}
-                                 </span>
-                                 <span className="flex items-center gap-1">
-                                     <span className="material-symbols-outlined text-sm">person</span>
-                                     {task.assignee}
-                                 </span>
-                             </div>
-                         </div>
-                     </div>
+                        <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                                <h4 className={`text-base font-semibold truncate ${task.status === Status.COMPLETED ? 'text-gray-500 line-through' : 'text-gray-900 dark:text-white'}`}>{task.title}</h4>
+                                <span className={`px-2 py-0.5 text-[10px] uppercase font-bold rounded ${task.priority === Priority.HIGH ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                                    task.priority === Priority.MEDIUM ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                                        'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+                                    }`}>{t.priorityVal[task.priority]}</span>
+                            </div>
+                            <div className="flex items-center gap-4 mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                <span className={`flex items-center gap-1 ${dueStatus.className}`}>
+                                    <span className="material-symbols-outlined text-sm">{dueStatus.icon}</span>
+                                    {task.dueDate}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-sm">person</span>
+                                    {task.assignee}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-                     <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto mt-2 sm:mt-0">
-                         {/* Timer */}
-                         <div className="flex-1 sm:flex-none">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 w-full sm:w-auto mt-2 sm:mt-0">
+                        {/* Timer */}
+                        <div className="flex-1 sm:flex-none">
                             <TaskTimer task={task} updateTask={updateTask} t={t} className="w-full sm:w-auto" />
-                         </div>
+                        </div>
 
-                         {/* Actions */}
-                         <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex-shrink-0">
-                            <TTSButton 
-                                task={task} 
-                                isPlaying={readingTaskId === task.id} 
-                                isLoading={loadingTaskId === task.id} 
-                                onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                        {/* Actions */}
+                        <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex-shrink-0">
+                            <TTSButton
+                                task={task}
+                                isPlaying={readingTaskId === task.id}
+                                isLoading={loadingTaskId === task.id}
+                                onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                             />
-                             <button
+                            <button
                                 type="button"
-                                onClick={(e) => { 
-                                    e.stopPropagation(); 
-                                    onDeleteClick(task); 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onDeleteClick(task);
                                 }}
                                 className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full text-gray-400 hover:text-red-500 transition-colors"
-                             >
-                                 <span className="material-symbols-outlined">delete</span>
-                             </button>
-                         </div>
-                     </div>
+                            >
+                                <span className="material-symbols-outlined">delete</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             );
         })}
@@ -323,10 +319,10 @@ const KanbanView: React.FC<ViewProps> = ({ tasks, t, updateTask, onEditClick, on
     const columns = Object.values(Status);
     const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
     const [dragOverColumn, setDragOverColumn] = useState<Status | null>(null);
-    
+
     // Define specific colors for each status column
     const getStatusColors = (status: Status) => {
-         switch (status) {
+        switch (status) {
             case Status.NOT_STARTED: return { border: 'border-l-gray-400', headerText: 'text-gray-600 dark:text-gray-400' };
             case Status.IN_PROGRESS: return { border: 'border-l-blue-500', headerText: 'text-blue-600 dark:text-blue-400' };
             case Status.COMPLETED: return { border: 'border-l-green-500', headerText: 'text-green-600 dark:text-green-400' };
@@ -354,7 +350,7 @@ const KanbanView: React.FC<ViewProps> = ({ tasks, t, updateTask, onEditClick, on
         setDragOverColumn(null);
         setDraggedTaskId(null);
         const taskId = e.dataTransfer.getData('text/plain');
-        
+
         if (taskId) {
             // Find task to verify it exists and status is different
             const task = tasks.find(t => t.id === taskId);
@@ -381,13 +377,12 @@ const KanbanView: React.FC<ViewProps> = ({ tasks, t, updateTask, onEditClick, on
                 const isOver = dragOverColumn === status;
 
                 return (
-                    <div 
-                        key={status} 
-                        className={`flex-1 min-w-[280px] rounded-xl p-4 flex flex-col transition-colors duration-200 ${
-                            isOver 
-                            ? 'bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-300 dark:border-primary-700 border-dashed' 
+                    <div
+                        key={status}
+                        className={`flex-1 min-w-[280px] rounded-xl p-4 flex flex-col transition-colors duration-200 ${isOver
+                            ? 'bg-primary-50 dark:bg-primary-900/20 border-2 border-primary-300 dark:border-primary-700 border-dashed'
                             : 'bg-gray-50 dark:bg-gray-800/50 border border-transparent'
-                        }`}
+                            }`}
                         onDragOver={(e) => handleDragOver(e, status)}
                         onDrop={(e) => handleDrop(e, status)}
                     >
@@ -399,45 +394,44 @@ const KanbanView: React.FC<ViewProps> = ({ tasks, t, updateTask, onEditClick, on
                         </div>
                         <div className="space-y-3 flex-1 overflow-y-auto pr-1 scrollbar-thin">
                             {columnTasks.map(task => (
-                                <div 
+                                <div
                                     key={task.id}
                                     draggable
                                     onDragStart={(e) => handleDragStart(e, task.id)}
                                     onClick={() => onEditClick(task)}
-                                    className={`bg-white dark:bg-surface-dark p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-all border-l-4 ${colors.border} ${
-                                        draggedTaskId === task.id ? 'opacity-50 scale-95' : 'opacity-100'
-                                    }`}
+                                    className={`bg-white dark:bg-surface-dark p-3 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-all border-l-4 ${colors.border} ${draggedTaskId === task.id ? 'opacity-50 scale-95' : 'opacity-100'
+                                        }`}
                                 >
                                     <div className="flex justify-between items-start">
                                         <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-2 mb-2 flex-1 pointer-events-none">{task.title}</p>
                                         <div onClick={e => e.stopPropagation()}>
-                                            <TTSButton 
-                                                task={task} 
-                                                isPlaying={readingTaskId === task.id} 
-                                                isLoading={loadingTaskId === task.id} 
-                                                onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                                            <TTSButton
+                                                task={task}
+                                                isPlaying={readingTaskId === task.id}
+                                                isLoading={loadingTaskId === task.id}
+                                                onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                                             />
                                         </div>
                                     </div>
-                                    
+
                                     {/* Timer Integration for Kanban */}
                                     <div className="mb-2">
                                         <TaskTimer task={task} updateTask={updateTask} t={t} compact variant="pill" className="w-full justify-between" />
                                     </div>
 
                                     <div className="flex justify-between items-center pointer-events-none">
-                                         {/* Since we use border color for status, we add a small badge for High Priority to not lose info */}
-                                         {task.priority === Priority.HIGH && (
-                                             <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded dark:bg-red-900/30 dark:text-red-400 mr-2">
+                                        {/* Since we use border color for status, we add a small badge for High Priority to not lose info */}
+                                        {task.priority === Priority.HIGH && (
+                                            <span className="text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded dark:bg-red-900/30 dark:text-red-400 mr-2">
                                                 {t.priorityVal[Priority.HIGH].toUpperCase()}
-                                             </span>
-                                         )}
-                                         <span className={`text-[10px] px-1.5 py-0.5 rounded ${getDueDateStatus(task).className} bg-opacity-10 bg-gray-500`}>
-                                             {task.dueDate}
-                                         </span>
-                                         <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs flex items-center justify-center font-bold">
-                                             {task.assignee}
-                                         </div>
+                                            </span>
+                                        )}
+                                        <span className={`text-[10px] px-1.5 py-0.5 rounded ${getDueDateStatus(task).className} bg-opacity-10 bg-gray-500`}>
+                                            {task.dueDate}
+                                        </span>
+                                        <div className="w-6 h-6 rounded-full bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs flex items-center justify-center font-bold">
+                                            {task.assignee}
+                                        </div>
                                     </div>
                                 </div>
                             ))}
@@ -472,17 +466,15 @@ const TableView: React.FC<ViewProps> = ({ tasks, t, updateTask, onEditClick, onD
                     <tr key={task.id} onClick={() => onEditClick(task)} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-colors group">
                         <td className="px-4 py-3 font-medium text-gray-900 dark:text-white min-w-[200px]">{task.title}</td>
                         <td className="px-4 py-3 whitespace-nowrap">
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                                task.status === Status.COMPLETED ? 'bg-green-100 text-green-700' : 
+                            <span className={`px-2 py-1 rounded-full text-xs ${task.status === Status.COMPLETED ? 'bg-green-100 text-green-700' :
                                 task.status === Status.IN_PROGRESS ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
-                            }`}>
+                                }`}>
                                 {t.statusVal[task.status]}
                             </span>
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap">
-                            <span className={`px-2 py-1 rounded-full text-xs ${
-                                task.priority === Priority.HIGH ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'
-                            }`}>
+                            <span className={`px-2 py-1 rounded-full text-xs ${task.priority === Priority.HIGH ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600'
+                                }`}>
                                 {t.priorityVal[task.priority]}
                             </span>
                         </td>
@@ -493,17 +485,17 @@ const TableView: React.FC<ViewProps> = ({ tasks, t, updateTask, onEditClick, onD
                         <td className="px-4 py-3 text-right whitespace-nowrap">
                             {/* Simplified actions container - removed outer click handler to avoid conflicts */}
                             <div className="flex items-center justify-end gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
-                                <TTSButton 
-                                    task={task} 
-                                    isPlaying={readingTaskId === task.id} 
-                                    isLoading={loadingTaskId === task.id} 
-                                    onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                                <TTSButton
+                                    task={task}
+                                    isPlaying={readingTaskId === task.id}
+                                    isLoading={loadingTaskId === task.id}
+                                    onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                                 />
                                 <button
                                     type="button"
-                                    onClick={(e) => { 
-                                        e.stopPropagation(); 
-                                        onDeleteClick(task); 
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        onDeleteClick(task);
                                     }}
                                     className="p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors z-10 relative"
                                     title={t.delete}
@@ -553,7 +545,7 @@ const EisenhowerMatrixView: React.FC<ViewProps & { updateTask: (id: string, upda
         if (taskId) {
             const targetQuad = quadrants.find(q => q.id === quadId);
             const task = tasks.find(t => t.id === taskId);
-            
+
             if (targetQuad && task) {
                 // Check if values actually changed to avoid unnecessary updates
                 if (task.isUrgent !== targetQuad.isUrgent || task.isImportant !== targetQuad.isImportant) {
@@ -571,8 +563,8 @@ const EisenhowerMatrixView: React.FC<ViewProps & { updateTask: (id: string, upda
             {quadrants.map((quad) => {
                 const isOver = dragOverQuad === quad.id;
                 return (
-                    <div 
-                        key={quad.id} 
+                    <div
+                        key={quad.id}
                         className={`rounded-xl border p-4 flex flex-col transition-all duration-200 ${quad.color} ${isOver ? 'ring-2 ring-primary-500 scale-[1.01] shadow-lg' : ''}`}
                         onDragOver={(e) => handleDragOver(e, quad.id)}
                         onDrop={(e) => handleDrop(e, quad.id)}
@@ -583,21 +575,21 @@ const EisenhowerMatrixView: React.FC<ViewProps & { updateTask: (id: string, upda
                         </div>
                         <div className="space-y-2 flex-1 overflow-y-auto pr-1">
                             {tasks.filter(quad.filter).map(task => (
-                                <div 
-                                    key={task.id} 
+                                <div
+                                    key={task.id}
                                     draggable
                                     onDragStart={(e) => handleDragStart(e, task.id)}
-                                    onClick={() => onEditClick(task)} 
+                                    onClick={() => onEditClick(task)}
                                     className={`bg-white dark:bg-surface-dark p-3 rounded-lg shadow-sm cursor-grab active:cursor-grabbing hover:shadow hover:-translate-y-0.5 transition-all border border-transparent dark:border-gray-700 ${draggedTaskId === task.id ? 'opacity-50' : 'opacity-100'}`}
                                 >
                                     <div className="flex justify-between items-start pointer-events-none">
                                         <p className="text-sm font-medium text-gray-900 dark:text-white flex-1">{task.title}</p>
                                         <div onClick={e => e.stopPropagation()} className="pointer-events-auto">
-                                            <TTSButton 
-                                                task={task} 
-                                                isPlaying={readingTaskId === task.id} 
-                                                isLoading={loadingTaskId === task.id} 
-                                                onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                                            <TTSButton
+                                                task={task}
+                                                isPlaying={readingTaskId === task.id}
+                                                isLoading={loadingTaskId === task.id}
+                                                onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                                             />
                                         </div>
                                     </div>
@@ -617,7 +609,7 @@ const EisenhowerMatrixView: React.FC<ViewProps & { updateTask: (id: string, upda
 
 const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, onEditClick, language, onPlayTTS, readingTaskId, loadingTaskId }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [calViewMode, setCalViewMode] = useState<'month' | 'week' | 'day'>('month');
+    const [calViewMode, setCalViewMode] = useState<'month' | 'week' | 'day'>('day');
 
     // Helper to properly format local date string YYYY-MM-DD
     const toDateStr = (d: Date) => {
@@ -656,7 +648,7 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
 
     // Label formatting - Using standardized locale logic from app state
     const localeStr = getLocale(language as any);
-    
+
     let headerLabel = '';
     if (calViewMode === 'month') {
         headerLabel = currentDate.toLocaleString(localeStr, { month: 'long', year: 'numeric' });
@@ -698,21 +690,20 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                                     <div className={`text-xs font-bold mb-1 ml-1 ${dateStr === toDateStr(new Date()) ? 'text-primary-600' : 'text-gray-500'}`}>{day}</div>
                                     <div className="space-y-1">
                                         {dayTasks.map(task => (
-                                            <div 
-                                                key={task.id} 
+                                            <div
+                                                key={task.id}
                                                 onClick={() => onEditClick(task)}
-                                                className={`text-[10px] p-1 rounded cursor-pointer truncate group relative ${
-                                                    task.priority === Priority.HIGH ? 'bg-red-100 text-red-700' : 
+                                                className={`text-[10px] p-1 rounded cursor-pointer truncate group relative ${task.priority === Priority.HIGH ? 'bg-red-100 text-red-700' :
                                                     task.status === Status.COMPLETED ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
-                                                }`}
+                                                    }`}
                                             >
                                                 {task.title}
-                                                 <div className="hidden group-hover:block absolute right-0 top-0 bottom-0 bg-inherit px-1" onClick={e => e.stopPropagation()}>
-                                                     <TTSButton 
-                                                        task={task} 
-                                                        isPlaying={readingTaskId === task.id} 
-                                                        isLoading={loadingTaskId === task.id} 
-                                                        onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                                                <div className="hidden group-hover:block absolute right-0 top-0 bottom-0 bg-inherit px-1" onClick={e => e.stopPropagation()}>
+                                                    <TTSButton
+                                                        task={task}
+                                                        isPlaying={readingTaskId === task.id}
+                                                        isLoading={loadingTaskId === task.id}
+                                                        onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                                                     />
                                                 </div>
                                             </div>
@@ -730,9 +721,9 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
     const renderWeek = () => {
         const startOfWeek = new Date(currentDate);
         startOfWeek.setDate(currentDate.getDate() - currentDate.getDay());
-        
+
         const weekDays = [];
-        for(let i=0; i<7; i++) {
+        for (let i = 0; i < 7; i++) {
             const d = new Date(startOfWeek);
             d.setDate(d.getDate() + i);
             weekDays.push(d);
@@ -746,7 +737,7 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                             const dateStr = toDateStr(date);
                             const dayTasks = tasks.filter(t => t.dueDate === dateStr);
                             const isToday = dateStr === toDateStr(new Date());
-                            
+
                             return (
                                 <div key={idx} className={`flex flex-col h-full bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 rounded-lg p-2 ${isToday ? 'ring-2 ring-primary-500 ring-inset' : ''}`}>
                                     <div className="text-center mb-2 pb-2 border-b border-gray-200 dark:border-gray-700">
@@ -757,28 +748,26 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                                     </div>
                                     <div className="flex-1 overflow-y-auto space-y-2">
                                         {dayTasks.map(task => (
-                                            <div 
-                                                key={task.id} 
+                                            <div
+                                                key={task.id}
                                                 onClick={() => onEditClick(task)}
-                                                className={`text-xs p-2 rounded cursor-pointer group relative border transition-shadow hover:shadow-sm ${
-                                                    task.status === Status.COMPLETED ? 'bg-green-50 border-green-100 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300 line-through decoration-green-700/50' : 
+                                                className={`text-xs p-2 rounded cursor-pointer group relative border transition-shadow hover:shadow-sm ${task.status === Status.COMPLETED ? 'bg-green-50 border-green-100 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300 line-through decoration-green-700/50' :
                                                     'bg-white border-gray-200 text-gray-700 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200'
-                                                }`}
+                                                    }`}
                                             >
                                                 <div className="font-medium truncate mb-1">{task.title}</div>
                                                 <div className="flex justify-between items-center text-[10px] text-gray-400">
-                                                    <span className={`px-1 py-0.5 rounded text-[8px] font-bold ${
-                                                        task.priority === Priority.HIGH ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'
-                                                    }`}>
-                                                        {task.priority.substr(0,1)}
+                                                    <span className={`px-1 py-0.5 rounded text-[8px] font-bold ${task.priority === Priority.HIGH ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'
+                                                        }`}>
+                                                        {task.priority.substr(0, 1)}
                                                     </span>
                                                 </div>
-                                                 <div className="hidden group-hover:block absolute right-1 top-1" onClick={e => e.stopPropagation()}>
-                                                     <TTSButton 
-                                                        task={task} 
-                                                        isPlaying={readingTaskId === task.id} 
-                                                        isLoading={loadingTaskId === task.id} 
-                                                        onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                                                <div className="hidden group-hover:block absolute right-1 top-1" onClick={e => e.stopPropagation()}>
+                                                    <TTSButton
+                                                        task={task}
+                                                        isPlaying={readingTaskId === task.id}
+                                                        isLoading={loadingTaskId === task.id}
+                                                        onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                                                     />
                                                 </div>
                                             </div>
@@ -800,7 +789,7 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
 
         return (
             <div className="h-full flex flex-col max-w-3xl mx-auto w-full p-4">
-                 <div className="flex items-center gap-6 mb-6 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                <div className="flex items-center gap-6 mb-6 p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
                     <div className={`flex flex-col items-center justify-center w-24 h-24 rounded-2xl ${isToday ? 'bg-gradient-to-br from-primary-500 to-indigo-600 text-white shadow-lg shadow-primary-500/30' : 'bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-600'}`}>
                         <span className="text-sm uppercase font-bold tracking-wider opacity-90">{currentDate.toLocaleDateString(localeStr, { weekday: 'short' })}</span>
                         <span className="text-4xl font-extrabold">{currentDate.getDate()}</span>
@@ -809,22 +798,22 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                         <h3 className="text-2xl font-bold text-gray-900 dark:text-white capitalize">{currentDate.toLocaleDateString(localeStr, { month: 'long', year: 'numeric' })}</h3>
                         <p className="text-gray-500 dark:text-gray-400 mt-1">{dayTasks.length} {dayTasks.length === 1 ? 'task' : 'tasks'} scheduled</p>
                     </div>
-                 </div>
+                </div>
 
-                 <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+                <div className="flex-1 overflow-y-auto space-y-3 pr-2">
                     {dayTasks.length === 0 ? (
-                         <div className="flex flex-col items-center justify-center h-full text-gray-400 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
+                        <div className="flex flex-col items-center justify-center h-full text-gray-400 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700">
                             <span className="material-symbols-outlined text-5xl mb-3 opacity-50">event_available</span>
                             <p className="font-medium">{t.noTasks}</p>
                             <button onClick={() => {
                                 // Optional: trigger add task modal with this date prefills
                             }} className="mt-4 text-primary-600 hover:underline text-sm hidden">Add a task for today</button>
-                         </div>
+                        </div>
                     ) : (
                         dayTasks.map(task => (
-                             <div key={task.id} onClick={() => onEditClick(task)} className="bg-white dark:bg-surface-dark p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all flex items-center gap-4 cursor-pointer group">
+                            <div key={task.id} onClick={() => onEditClick(task)} className="bg-white dark:bg-surface-dark p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all flex items-center gap-4 cursor-pointer group">
                                 <div className={`w-1.5 h-12 rounded-full ${task.priority === Priority.HIGH ? 'bg-red-500' : task.priority === Priority.MEDIUM ? 'bg-yellow-500' : 'bg-green-500'}`}></div>
-                                
+
                                 <button className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${task.status === Status.COMPLETED ? 'bg-green-500 border-green-500' : 'border-gray-300 dark:border-gray-600'}`}>
                                     {task.status === Status.COMPLETED && <span className="material-symbols-outlined text-white text-xs font-bold">check</span>}
                                 </button>
@@ -842,18 +831,18 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                                         <div className="text-xs text-gray-500 dark:text-gray-400 font-mono">{task.estimatedTime ? `${task.estimatedTime}h` : '--'}</div>
                                     </div>
                                     <div onClick={e => e.stopPropagation()}>
-                                         <TTSButton 
-                                            task={task} 
-                                            isPlaying={readingTaskId === task.id} 
-                                            isLoading={loadingTaskId === task.id} 
-                                            onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }} 
+                                        <TTSButton
+                                            task={task}
+                                            isPlaying={readingTaskId === task.id}
+                                            isLoading={loadingTaskId === task.id}
+                                            onClick={(e) => { e.stopPropagation(); onPlayTTS(task); }}
                                         />
                                     </div>
                                 </div>
-                             </div>
+                            </div>
                         ))
                     )}
-                 </div>
+                </div>
             </div>
         );
     };
@@ -874,7 +863,7 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                     </button>
                 </div>
                 <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg">
-                    {(['month', 'week', 'day'] as const).map(m => (
+                    {(['day', 'week', 'month'] as const).map(m => (
                         <button
                             key={m}
                             onClick={() => setCalViewMode(m)}
@@ -885,7 +874,7 @@ const CalendarView: React.FC<ViewProps & { language: string }> = ({ tasks, t, on
                     ))}
                 </div>
             </div>
-            
+
             <div className="flex-1 overflow-hidden p-2 relative">
                 {calViewMode === 'month' && renderMonth()}
                 {calViewMode === 'week' && renderWeek()}
@@ -899,7 +888,7 @@ export const TaskModule: React.FC = () => {
     const { tasks, addTask, updateTask, deleteTask, language, currency, addLog } = useContext(AppContext);
     const t = TRANSLATIONS[language];
     const localeStr = getLocale(language);
-    
+
     const [viewMode, setViewMode] = useState<ViewMode>('list');
     const [showCompleted, setShowCompleted] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -917,19 +906,19 @@ export const TaskModule: React.FC = () => {
     // Cleanup audio on unmount & load voices
     useEffect(() => {
         const loadVoices = () => {
-             if (typeof window !== 'undefined' && window.speechSynthesis) {
-                 setAvailableVoices(window.speechSynthesis.getVoices());
-             }
+            if (typeof window !== 'undefined' && window.speechSynthesis) {
+                setAvailableVoices(window.speechSynthesis.getVoices());
+            }
         };
-        
+
         loadVoices();
-        
+
         if (typeof window !== 'undefined' && window.speechSynthesis) {
-             window.speechSynthesis.onvoiceschanged = loadVoices;
+            window.speechSynthesis.onvoiceschanged = loadVoices;
         }
 
         return () => {
-             if (audioContextRef.current) {
+            if (audioContextRef.current) {
                 audioContextRef.current.close();
             }
             if (typeof window !== 'undefined' && window.speechSynthesis) {
@@ -940,8 +929,8 @@ export const TaskModule: React.FC = () => {
 
     // Filter Logic
     const filteredTasks = tasks.filter(task => {
-        const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              task.description.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            task.description.toLowerCase().includes(searchQuery.toLowerCase());
         const matchesStatus = showCompleted ? true : task.status !== Status.COMPLETED;
         return matchesSearch && matchesStatus;
     });
@@ -954,9 +943,9 @@ export const TaskModule: React.FC = () => {
     const handleDeleteClick = (task: Task) => {
         const isSpanish = language === 'es';
         const taskTitle = task.title || (isSpanish ? 'Sin título' : 'Untitled');
-        
-        const confirmMsg = isSpanish 
-            ? `¿Estás seguro de que quieres borrar la tarea: "${taskTitle}"?` 
+
+        const confirmMsg = isSpanish
+            ? `¿Estás seguro de que quieres borrar la tarea: "${taskTitle}"?`
             : `Are you sure you want to delete the task: "${taskTitle}"?`;
 
         setTimeout(() => {
@@ -969,7 +958,7 @@ export const TaskModule: React.FC = () => {
     const handleSaveTask = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        
+
         const taskData: any = {
             title: formData.get('title') as string,
             status: formData.get('status') as Status,
@@ -984,16 +973,16 @@ export const TaskModule: React.FC = () => {
         };
 
         if (editingTask) {
-             taskData.actualTime = parseFloat(formData.get('actualTime') as string) || 0;
-             taskData.actualCost = parseFloat(formData.get('actualCost') as string) || 0;
-             updateTask(editingTask.id, taskData);
+            taskData.actualTime = parseFloat(formData.get('actualTime') as string) || 0;
+            taskData.actualCost = parseFloat(formData.get('actualCost') as string) || 0;
+            updateTask(editingTask.id, taskData);
         } else {
-             addTask({
-                 ...taskData,
-                 currency: currency, // Default to current currency
-                 actualTime: 0,
-                 actualCost: 0
-             });
+            addTask({
+                ...taskData,
+                currency: currency, // Default to current currency
+                actualTime: 0,
+                actualCost: 0
+            });
         }
         setIsModalOpen(false);
         setEditingTask(null);
@@ -1003,7 +992,7 @@ export const TaskModule: React.FC = () => {
         if (readingTaskId) {
             // Stop logic
             if (audioContextRef.current) {
-                try { await audioContextRef.current.close(); } catch(e) {}
+                try { await audioContextRef.current.close(); } catch (e) { }
                 audioContextRef.current = null;
             }
             if (typeof window !== 'undefined' && window.speechSynthesis) {
@@ -1011,7 +1000,7 @@ export const TaskModule: React.FC = () => {
             }
             // Clear ref to release memory
             utteranceRef.current = null;
-            
+
             setReadingTaskId(null);
             // If clicking the same task that is playing, just stop.
             if (readingTaskId === task.id) return;
@@ -1024,14 +1013,14 @@ export const TaskModule: React.FC = () => {
         try {
             if (task.dueDate) {
                 const [y, m, d] = task.dueDate.split('-').map(Number);
-                const dateObj = new Date(y, m-1, d);
+                const dateObj = new Date(y, m - 1, d);
                 dateSpoken = dateObj.toLocaleDateString(localeStr, { weekday: 'long', month: 'long', day: 'numeric' });
             }
-        } catch(e) {}
+        } catch (e) { }
 
         const priorityText = t.priorityVal[task.priority];
         const ts = t.ttsStructure;
-        
+
         // "Task: Title. Priority High. Due on Monday..." vs "Tarea: Título. Prioridad Alta. Vence el Lunes..."
         const textToSay = `${ts.prefix} ${task.title}. ${ts.priority} ${priorityText}. ${ts.due} ${dateSpoken}. ${ts.desc} ${task.description}`;
 
@@ -1040,7 +1029,7 @@ export const TaskModule: React.FC = () => {
             if (!apiKey) throw new Error("API_KEY_MISSING");
 
             const ai = new GoogleGenAI({ apiKey });
-            
+
             const response = await ai.models.generateContent({
                 model: 'gemini-2.5-flash-preview-tts',
                 contents: [{ parts: [{ text: textToSay }] }],
@@ -1056,15 +1045,15 @@ export const TaskModule: React.FC = () => {
 
             const audioData = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
             if (!audioData) throw new Error("NO_AUDIO_DATA");
-            
+
             const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
             audioContextRef.current = ctx;
-            
+
             // Resume context if suspended (common in some browsers)
             if (ctx.state === 'suspended') {
                 await ctx.resume();
             }
-            
+
             const buffer = await decodeAudioData(
                 base64ToUint8Array(audioData),
                 ctx
@@ -1083,21 +1072,21 @@ export const TaskModule: React.FC = () => {
         } catch (error) {
             console.warn("Gemini TTS failed, falling back to Web Speech API", error);
             addLog('warning', 'VoiceAI', 'Gemini TTS failed, using system voice', error);
-            
+
             // Fallback to Web Speech API
             if ('speechSynthesis' in window) {
                 // Ensure we cancel any previous
                 window.speechSynthesis.cancel();
-                
+
                 const utterance = new SpeechSynthesisUtterance(textToSay);
                 utterance.lang = language === 'es' ? 'es-MX' : 'en-US';
-                
+
                 // Try to select a good voice
                 const voices = availableVoices.length > 0 ? availableVoices : window.speechSynthesis.getVoices();
                 // Prefer Google voices if available as they are usually higher quality
                 const preferredVoice = voices.find(v => v.lang.startsWith(utterance.lang) && v.name.includes('Google')) ||
-                                     voices.find(v => v.lang.startsWith(utterance.lang));
-                
+                    voices.find(v => v.lang.startsWith(utterance.lang));
+
                 if (preferredVoice) utterance.voice = preferredVoice;
 
                 utterance.onend = () => {
@@ -1136,18 +1125,17 @@ export const TaskModule: React.FC = () => {
                         <button
                             key={mode}
                             onClick={() => setViewMode(mode)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-                                viewMode === mode 
-                                ? 'bg-primary-600 text-white shadow-md' 
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${viewMode === mode
+                                ? 'bg-primary-600 text-white shadow-md'
                                 : 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                            }`}
+                                }`}
                         >
                             <span className="material-symbols-outlined text-[18px]">
-                                {mode === 'list' ? 'list' : 
-                                 mode === 'board' ? 'view_kanban' : 
-                                 mode === 'calendar' ? 'calendar_month' : 
-                                 mode === 'table' ? 'table_view' : 
-                                 mode === 'matrix' ? 'grid_view' : 'bar_chart'}
+                                {mode === 'list' ? 'list' :
+                                    mode === 'board' ? 'view_kanban' :
+                                        mode === 'calendar' ? 'calendar_month' :
+                                            mode === 'table' ? 'table_view' :
+                                                mode === 'matrix' ? 'grid_view' : 'bar_chart'}
                             </span>
                             {t.view[mode]}
                         </button>
@@ -1160,8 +1148,8 @@ export const TaskModule: React.FC = () => {
                         onClick={() => setShowCompleted(!showCompleted)}
                         className={`
                             flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold transition-all border
-                            ${showCompleted 
-                                ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800' 
+                            ${showCompleted
+                                ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
                                 : 'bg-white text-gray-400 border-gray-200 dark:bg-gray-800 dark:text-gray-500 dark:border-gray-700 hover:text-gray-600'}
                         `}
                         title={showCompleted ? t.hideCompleted : t.showCompleted}
@@ -1176,15 +1164,15 @@ export const TaskModule: React.FC = () => {
 
                     <div className="relative flex-1 md:flex-none">
                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
-                        <input 
-                            type="text" 
-                            placeholder={t.search} 
+                        <input
+                            type="text"
+                            placeholder={t.search}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 pr-4 py-2 w-full md:w-64 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-2 focus:ring-primary-500 transition-all"
                         />
                     </div>
-                    <button 
+                    <button
                         onClick={() => { setEditingTask(null); setIsModalOpen(true); }}
                         className="flex items-center gap-2 px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-sm font-bold shadow-sm transition-transform active:scale-95 whitespace-nowrap"
                     >
@@ -1221,13 +1209,13 @@ export const TaskModule: React.FC = () => {
                                 <span className="material-symbols-outlined">close</span>
                             </button>
                         </div>
-                        
+
                         <form onSubmit={handleSaveTask} className="flex-1 overflow-y-auto p-6 space-y-4">
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t.title}</label>
                                 <input name="title" required defaultValue={editingTask?.title} placeholder={t.taskTitlePlaceholder} className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 focus:ring-2 focus:ring-primary-500 outline-none transition-all" />
                             </div>
-                            
+
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t.status}</label>
