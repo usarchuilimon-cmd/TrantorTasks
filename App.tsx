@@ -202,7 +202,6 @@ const App: React.FC = () => {
                 actualTime: item.actual_time,
                 isUrgent: item.is_urgent,
                 isImportant: item.is_important,
-                isImportant: item.is_important,
                 comments: item.comments || [],
                 completedAt: item.completed_at
             }));
@@ -262,7 +261,6 @@ const App: React.FC = () => {
                 estimatedTime: data.estimated_time,
                 actualTime: data.actual_time,
                 isUrgent: data.is_urgent,
-                isImportant: data.is_important,
                 isImportant: data.is_important,
                 comments: data.comments || [],
                 completedAt: data.completed_at
